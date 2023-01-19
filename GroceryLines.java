@@ -1,4 +1,4 @@
-package com.company;
+
 import java.util.*;
 
 // Name: Owen Murphree
@@ -7,7 +7,9 @@ import java.util.*;
 // Instructor: Sharon Perry
 // Assignment: 05-Part-2-Shoppers
 
-public class Part2{
+//this is a testsdf
+
+public class GroceryLines{
 
 
     public static int custNum = 1;//this int keeps track of the customer number
