@@ -1,13 +1,11 @@
 
 import java.util.*;
 
-// Name: Owen Murphree
-// Class: CS 3305/W04
-// Term: Fall 2022
-// Instructor: Sharon Perry
-// Assignment: 05-Part-2-Shoppers
+/* The following program is a simple simulation of checkout lines in a grocery store.
+The lines are implemented using queues and customers are added and removed from the lines randomly.
+ */
 
-//this is a testsdf
+
 
 public class GroceryLines{
 
