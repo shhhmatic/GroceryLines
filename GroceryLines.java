@@ -63,11 +63,96 @@ public class GroceryLines{
 
     }
 
+    //method to simulation of a busy day
+    public static void busyDaySim(){
+        //populating the queues with one customer each
+        Q1.add("Customer #" + custNum);
+        custNum++;
+        Q2.add("Customer #" + custNum);
+        custNum++;
+        Q3.add("Customer #" + custNum);
+        custNum++;
+        Q4.add("Customer #" + custNum);
+        custNum++;
+        Q5.add("Customer #" + custNum);
+        custNum++;
+
+        printLines();
 
 
-    public static void main(String[] args) {
 
 
+
+        /*this loop iterates 100 times, each time it iterates
+        there is a 50% chance that it generates a customer
+        and a 50% chance that a transaction is completed
+         */
+        for(int i = 0; i < 100; i++){
+            int r = new Random().nextInt(3);
+
+            if(r==0){
+                completeTransaction();
+            }else{
+                generateCustomer();
+            }
+
+            //the following is used to slow down the program to a manageable pace
+            //so that the user can read what is happening
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                System.out.println("Something went wrong");
+            }
+
+        }
+    }
+
+    //method to run simulation of a slow day
+    public static void slowDaySim(){
+        //populating the queues with one customer each
+        Q1.add("Customer #" + custNum);
+        custNum++;
+        Q2.add("Customer #" + custNum);
+        custNum++;
+        Q3.add("Customer #" + custNum);
+        custNum++;
+        Q4.add("Customer #" + custNum);
+        custNum++;
+        Q5.add("Customer #" + custNum);
+        custNum++;
+
+        printLines();
+
+
+
+
+
+        /*this loop iterates 100 times, each time it iterates
+        there is a 50% chance that it generates a customer
+        and a 50% chance that a transaction is completed
+         */
+        for(int i = 0; i < 100; i++){
+            int r = new Random().nextInt(3);
+
+            if(r==0){
+                generateCustomer();
+            }else{
+                completeTransaction();
+            }
+
+            //the following is used to slow down the program to a manageable pace
+            //so that the user can read what is happening
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                System.out.println("Something went wrong");
+            }
+
+        }
+    }
+
+    //method to run simulation of an average day
+    public static void averageDaySim(){
         //populating the queues with one customer each
         Q1.add("Customer #" + custNum);
         custNum++;
@@ -98,15 +183,58 @@ public class GroceryLines{
                 completeTransaction();
             }
 
-            //the following is used to slow down the program to a managable pace
+            //the following is used to slow down the program to a manageable pace
             //so that the user can read what is happening
             try {
-                Thread.sleep(1500);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 System.out.println("Something went wrong");
             }
 
         }
+    }
+
+
+
+    public static void main(String[] args) {
+
+        Scanner input = new Scanner(System.in);
+        int userChoice;
+
+        System.out.println("\n*******************************************************************");
+        System.out.println("Would you like to simulate a store on a busy, average, or slow day?");
+        System.out.println("*******************************************************************");
+        System.out.println("Enter '1' for a busy day");
+        System.out.println("Enter '2' for a slow day");
+        System.out.println("Enter '3' for an average day");
+
+
+        userChoice = input.nextInt();
+
+
+
+        switch(userChoice) {
+            case 1:
+                System.out.println("Beginning Busy Day Simulation....");
+                busyDaySim();
+                break;
+            case 2:
+                System.out.println("Beginning Slow Day Simulation....");
+                slowDaySim();
+                break;
+            case 3:
+                System.out.println("Beginning Average Day Simulation....");
+                averageDaySim();
+                break;
+            default:
+                System.out.println("Invalid Input....");
+                System.out.println("Terminating Program....");
+                System.exit(0);
+                break;
+        }
+
+
+
 
 
 
