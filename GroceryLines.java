@@ -84,8 +84,8 @@ public class GroceryLines{
 
 
         /*this loop iterates 100 times, each time it iterates
-        there is a 50% chance that it generates a customer
-        and a 50% chance that a transaction is completed
+        there is a 2/3 chance that it generates a customer
+        and a 1/3 chance that a transaction is completed
          */
         for(int i = 0; i < 100; i++){
             int r = new Random().nextInt(3);
@@ -128,8 +128,8 @@ public class GroceryLines{
 
 
         /*this loop iterates 100 times, each time it iterates
-        there is a 50% chance that it generates a customer
-        and a 50% chance that a transaction is completed
+        there is a 1/3 chance that it generates a customer
+        and a 2/3 chance that a transaction is completed
          */
         for(int i = 0; i < 100; i++){
             int r = new Random().nextInt(3);
@@ -205,8 +205,8 @@ public class GroceryLines{
         System.out.println("Would you like to simulate a store on a busy, average, or slow day?");
         System.out.println("*******************************************************************");
         System.out.println("Enter '1' for a busy day");
-        System.out.println("Enter '2' for a slow day");
-        System.out.println("Enter '3' for an average day");
+        System.out.println("Enter '2' for a average day");
+        System.out.println("Enter '3' for an slow day");
 
 
         userChoice = input.nextInt();
@@ -219,12 +219,12 @@ public class GroceryLines{
                 busyDaySim();
                 break;
             case 2:
-                System.out.println("Beginning Slow Day Simulation....");
-                slowDaySim();
-                break;
-            case 3:
                 System.out.println("Beginning Average Day Simulation....");
                 averageDaySim();
+                break;
+            case 3:
+                System.out.println("Beginning Slow Day Simulation....");
+                slowDaySim();
                 break;
             default:
                 System.out.println("Invalid Input....");
