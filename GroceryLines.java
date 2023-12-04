@@ -9,21 +9,38 @@ The lines are implemented using queues and customers are added and removed from 
 
 public class GroceryLines{
 
+    public static int totalCustomersArr = 5;
+    public static int totalCustomersSer = 0;
+    public static int totalTimeSpent = 0;
+    public static long startTime = System.currentTimeMillis();
+
+
 
     public static int custNum = 1;//this int keeps track of the customer number
 
     //creating the Queues to put into the array
-    public static Queue<String> Q1 = new LinkedList<>();
-    public static Queue<String> Q2 = new LinkedList<>();
-    public static Queue<String> Q3 = new LinkedList<>();
-    public static Queue<String> Q4 = new LinkedList<>();
-    public static Queue<String> Q5 = new LinkedList<>();
+    public static Queue<Customer> Q1 = new LinkedList<>();
+    public static Queue<Customer> Q2 = new LinkedList<>();
+    public static Queue<Customer> Q3 = new LinkedList<>();
+    public static Queue<Customer> Q4 = new LinkedList<>();
+    public static Queue<Customer> Q5 = new LinkedList<>();
 
     //putting the Queues into the array
     public static Queue[] lines = {Q1, Q2, Q3, Q4, Q5};
 
 
-    //simple method to print all of the queues
+    //method to print performance metrics
+    public static void printMetrics(){
+        System.out.println("_______Performance Metrics_______");
+        System.out.println("Total Customers Arrived: " + totalCustomersArr);
+        System.out.println("Total Customers Serviced: " + totalCustomersSer);
+        System.out.println("Average Time Spent in Line: " + (totalTimeSpent/totalCustomersSer) + " Milliseconds");
+        System.out.println("Staffing Cost: $" + ((System.currentTimeMillis()-startTime)/10)*.5);
+        System.out.println("***NOTE: Staffing Cost is calculated at $0.05 per Cashier per 10 Milliseconds.***");
+    }
+
+
+    //simple method to print all queues
     public static void printLines() {
         System.out.println("Q1: " + Q1);
         System.out.println("Q2: " + Q2);
@@ -43,8 +60,9 @@ public class GroceryLines{
             }
         }
 
-        lines[temp].add("Customer #" + custNum);
+        lines[temp].add(new Customer(custNum));
         custNum++;
+        totalCustomersArr++;
         System.out.println("Customer added to Queue # " + (temp+1) );
         printLines();
     }
@@ -57,7 +75,11 @@ public class GroceryLines{
             //do nothing
         }else {
             System.out.println("Transaction completed at Queue # " + (r + 1));
+            //(lines[r].peek()).setCustEndTime();
+            ((Customer) lines[r].peek()).setCustEndTime();
+            totalTimeSpent += ((Customer) lines[r].peek()).determineTotalTime();
             lines[r].remove();
+            totalCustomersSer++;
             printLines();
         }
 
@@ -66,15 +88,20 @@ public class GroceryLines{
     //method to simulation of a busy day
     public static void busyDaySim(){
         //populating the queues with one customer each
-        Q1.add("Customer #" + custNum);
+        //Q1.add("Customer #" + custNum);
+        Q1.add(new Customer(custNum));
         custNum++;
-        Q2.add("Customer #" + custNum);
+        //Q2.add("Customer #" + custNum);
+        Q2.add(new Customer(custNum));
         custNum++;
-        Q3.add("Customer #" + custNum);
+        //Q3.add("Customer #" + custNum);
+        Q3.add(new Customer(custNum));
         custNum++;
-        Q4.add("Customer #" + custNum);
+        //Q4.add("Customer #" + custNum);
+        Q4.add(new Customer(custNum));
         custNum++;
-        Q5.add("Customer #" + custNum);
+        //Q5.add("Customer #" + custNum);
+        Q5.add(new Customer(custNum));
         custNum++;
 
         printLines();
@@ -83,23 +110,29 @@ public class GroceryLines{
 
 
 
-        /*this loop iterates 100 times, each time it iterates
-        there is a 2/3 chance that it generates a customer
-        and a 1/3 chance that a transaction is completed
-         */
-        for(int i = 0; i < 100; i++){
+        /*
+        This loop iterates continuously for 15000 milliseconds
+        Once the time limit has been reached the simulation ceases to add new customers
+        Customer transactions continue to be completed until all customers are gone
+        */
+
+        long start = System.currentTimeMillis();
+        long end = start + 15000;
+        while((System.currentTimeMillis() < end) || !( (Q1.isEmpty())&&(Q2.isEmpty())&&(Q3.isEmpty())&&(Q4.isEmpty())&&(Q5.isEmpty()) )){
             int r = new Random().nextInt(3);
 
-            if(r==0){
-                completeTransaction();
-            }else{
+            if(r!=0 && System.currentTimeMillis() < end){
+
                 generateCustomer();
+            }else{
+                completeTransaction();
+
             }
 
             //the following is used to slow down the program to a manageable pace
             //so that the user can read what is happening
             try {
-                Thread.sleep(500);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 System.out.println("Something went wrong");
             }
@@ -110,15 +143,20 @@ public class GroceryLines{
     //method to run simulation of a slow day
     public static void slowDaySim(){
         //populating the queues with one customer each
-        Q1.add("Customer #" + custNum);
+        //Q1.add("Customer #" + custNum);
+        Q1.add(new Customer(custNum));
         custNum++;
-        Q2.add("Customer #" + custNum);
+        //Q2.add("Customer #" + custNum);
+        Q2.add(new Customer(custNum));
         custNum++;
-        Q3.add("Customer #" + custNum);
+        //Q3.add("Customer #" + custNum);
+        Q3.add(new Customer(custNum));
         custNum++;
-        Q4.add("Customer #" + custNum);
+        //Q4.add("Customer #" + custNum);
+        Q4.add(new Customer(custNum));
         custNum++;
-        Q5.add("Customer #" + custNum);
+        //Q5.add("Customer #" + custNum);
+        Q5.add(new Customer(custNum));
         custNum++;
 
         printLines();
@@ -127,15 +165,20 @@ public class GroceryLines{
 
 
 
-        /*this loop iterates 100 times, each time it iterates
-        there is a 1/3 chance that it generates a customer
-        and a 2/3 chance that a transaction is completed
-         */
-        for(int i = 0; i < 100; i++){
+        /*
+        This loop iterates continuously for 15000 milliseconds
+        Once the time limit has been reached the simulation ceases to add new customers
+        Customer transactions continue to be completed until all customers are gone
+        */
+
+        long start = System.currentTimeMillis();
+        long end = start + 15000;
+        while((System.currentTimeMillis() < end) || !( (Q1.isEmpty())&&(Q2.isEmpty())&&(Q3.isEmpty())&&(Q4.isEmpty())&&(Q5.isEmpty()) )){
             int r = new Random().nextInt(3);
 
-            if(r==0){
+            if(r==0 && System.currentTimeMillis() < end){
                 generateCustomer();
+
             }else{
                 completeTransaction();
             }
@@ -143,7 +186,7 @@ public class GroceryLines{
             //the following is used to slow down the program to a manageable pace
             //so that the user can read what is happening
             try {
-                Thread.sleep(500);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 System.out.println("Something went wrong");
             }
@@ -154,15 +197,21 @@ public class GroceryLines{
     //method to run simulation of an average day
     public static void averageDaySim(){
         //populating the queues with one customer each
-        Q1.add("Customer #" + custNum);
+        //populating the queues with one customer each
+        //Q1.add("Customer #" + custNum);
+        Q1.add(new Customer(custNum));
         custNum++;
-        Q2.add("Customer #" + custNum);
+        //Q2.add("Customer #" + custNum);
+        Q2.add(new Customer(custNum));
         custNum++;
-        Q3.add("Customer #" + custNum);
+        //Q3.add("Customer #" + custNum);
+        Q3.add(new Customer(custNum));
         custNum++;
-        Q4.add("Customer #" + custNum);
+        //Q4.add("Customer #" + custNum);
+        Q4.add(new Customer(custNum));
         custNum++;
-        Q5.add("Customer #" + custNum);
+        //Q5.add("Customer #" + custNum);
+        Q5.add(new Customer(custNum));
         custNum++;
 
         printLines();
@@ -170,15 +219,20 @@ public class GroceryLines{
 
 
 
-        /*this loop iterates 100 times, each time it iterates
-        there is a 50% chance that it generates a customer
-        and a 50% chance that a transaction is completed
-         */
-        for(int i = 0; i < 100; i++){
+        /*
+        This loop iterates continuously for 15000 milliseconds
+        Once the time limit has been reached the simulation ceases to add new customers
+        Customer transactions continue to be completed until all customers are gone
+        */
+
+        long start = System.currentTimeMillis();
+        long end = start + 15000;
+        while((System.currentTimeMillis() < end) || !( (Q1.isEmpty())&&(Q2.isEmpty())&&(Q3.isEmpty())&&(Q4.isEmpty())&&(Q5.isEmpty()) )){
             int r = new Random().nextInt(2);
 
-            if(r==0){
+            if(r==0 && System.currentTimeMillis() < end){
                 generateCustomer();
+
             }else{
                 completeTransaction();
             }
@@ -186,7 +240,7 @@ public class GroceryLines{
             //the following is used to slow down the program to a manageable pace
             //so that the user can read what is happening
             try {
-                Thread.sleep(500);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 System.out.println("Something went wrong");
             }
@@ -213,6 +267,7 @@ public class GroceryLines{
 
 
 
+        startTime = System.currentTimeMillis();
         switch(userChoice) {
             case 1:
                 System.out.println("Beginning Busy Day Simulation....");
@@ -238,6 +293,6 @@ public class GroceryLines{
 
 
 
-
+        printMetrics();
     }
 }
